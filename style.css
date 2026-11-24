@@ -1,0 +1,948 @@
+/* Urs Bergmann Florist, Brunngasse 13, Zürich
+   Der Rundgang: vor dem Schaufenster, dann das Regal, der Werktisch, die Gasse und die Ladentür.
+   Markise in Schwarz und Weiss wie die Wortmarke, Holz, Schnur, Heu. Die Farbe kommt aus den Blumen. */
+
+@font-face {
+  font-family: 'Bodoni Moda';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url(assets/fonts/bodoni-moda-400.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url(assets/fonts/open-sans-400.woff2) format('woff2');
+}
+
+:root {
+  --papier: #fcfbf8;
+  --weiss: #ffffff;
+  --heu-hell: #f4efe4;
+  --heu: #ddd1b3;
+  --heu-tief: #c7b99b;
+  --schnur: #8a7a5c;
+  --tinte: #1e1e1e;
+  --text: #3d3d3d;
+  --leise: #5f5a51;
+  --linie: #d9d3c6;
+  --linie-fest: #8a857b;
+  --rose: #b3496a;
+  --rose-hell: #f6e3e7;
+  --gassenblau: #1f3d82;
+
+  --serif: 'Bodoni Moda', Didot, 'Bodoni 72', Times, serif;
+  --sans: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+
+  --raum-s: clamp(1rem, 2vw, 1.5rem);
+  --raum-m: clamp(2rem, 4vw, 3rem);
+  --raum-l: clamp(4rem, 8vw, 7rem);
+  --breite: 72rem;
+  --rand: clamp(1rem, 4vw, 2.5rem);
+  --markise: 1.65rem;
+  --aus: cubic-bezier(0.16, 1, 0.3, 1);
+  --schatten: 0 0.6rem 1.4rem -0.7rem rgb(60 48 28 / 0.35);
+
+  color-scheme: light;
+  accent-color: var(--rose);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scrollbar-color: var(--heu-tief) var(--papier); }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+body {
+  margin: 0; background: var(--papier); color: var(--text);
+  font-family: var(--sans); font-size: 1.0625rem; line-height: 1.65;
+  overflow-x: clip;
+}
+::selection { background: var(--rose-hell); color: var(--tinte); }
+
+img { display: block; max-width: 100%; height: auto; }
+svg.z { display: block; overflow: visible; }
+
+a { color: var(--tinte); text-decoration-thickness: 1px; text-underline-offset: 0.22em; text-decoration-color: var(--linie-fest); }
+a:hover { text-decoration-color: var(--rose); }
+:focus-visible { outline: 2px solid var(--tinte); outline-offset: 3px; }
+
+h1, h2, h3 { font-family: var(--serif); font-weight: 400; color: var(--tinte); text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); line-height: 1.06; letter-spacing: -0.015em; }
+h2 { font-size: clamp(1.75rem, 3.4vw, 2.5rem); line-height: 1.15; letter-spacing: -0.01em; }
+h3 { font-size: 1.25rem; line-height: 1.25; font-weight: 500; }
+p { margin: 0; max-width: 62ch; text-wrap: pretty; }
+
+.huelle { width: 100%; max-width: var(--breite); margin-inline: auto; padding-inline: var(--rand); }
+
+.sprung { position: absolute; left: 1rem; top: -4rem; z-index: 30; background: var(--tinte); color: var(--weiss); padding: 0.6rem 1rem; }
+.sprung:focus { top: 1rem; }
+
+/* ---------- Kopf mit Markise ---------- */
+.kopf { background: var(--weiss); position: relative; z-index: 10; }
+.kopf::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 100%; height: var(--markise);
+  background: url(assets/markise.svg) repeat-x 0 0 / 3rem var(--markise);
+  filter: drop-shadow(0 0.35rem 0.3rem rgb(60 48 28 / 0.18));
+  pointer-events: none;
+}
+.kopf__innen { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.25rem 2rem; padding-block: 1rem 0.6rem; }
+.marke { display: block; flex: none; }
+.marke img { width: clamp(11rem, 30vw, 15.5rem); }
+.menue ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0 1.6rem; }
+.menue a, .kopf__telefon {
+  font-size: 0.8125rem; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
+  color: var(--text); padding-block: 0.6rem; display: inline-flex; align-items: center; gap: 0.4rem;
+}
+.menue a::before {
+  content: ""; width: 0.45rem; height: 0.45rem; border-radius: 50%;
+  background: var(--rose); transform: scale(0); transition: transform 0.35s var(--aus);
+}
+.menue a:hover, .menue a[aria-current="page"] { color: var(--tinte); }
+.menue a:hover::before, .menue a[aria-current="page"]::before { transform: scale(1); }
+.kopf__telefon { color: var(--tinte); font-weight: 600; letter-spacing: 0.04em; }
+.kopf__telefon:hover { color: var(--rose); }
+@media (min-width: 52rem) {
+  .kopf { position: sticky; top: 0; }
+  .kopf__innen { flex-wrap: nowrap; padding-block: 1.1rem 0.8rem; }
+  .menue { margin-left: auto; }
+}
+@media (max-width: 51.99rem) {
+  .menue { order: 3; width: 100%; }
+  .menue ul { flex-wrap: nowrap; justify-content: space-between; gap: 0 0.5rem; }
+  .menue a { letter-spacing: 0.04em; position: relative; }
+  .menue a::before { position: absolute; left: 50%; bottom: 0.1rem; margin-left: -0.225rem; width: 0.4rem; height: 0.4rem; }
+}
+
+/* Themaknopf: Tag und Nacht, neben der Telefonnummer */
+.kopf__rechts { display: flex; align-items: center; gap: 0.9rem; }
+.themaknopf {
+  position: relative; width: 2.75rem; height: 2.75rem; flex: none; border-radius: 50%; padding: 0; cursor: pointer;
+  border: 1px solid var(--linie-fest); background: transparent; color: var(--tinte);
+  display: grid; place-items: center;
+  transition: border-color 0.25s var(--aus), background-color 0.25s var(--aus), color 0.25s var(--aus);
+}
+.themaknopf[hidden] { display: none; }
+.themaknopf:hover { border-color: var(--rose); color: var(--rose); }
+.themaknopf .z { grid-area: 1 / 1; width: 1.2rem; height: 1.2rem; transition: transform 0.45s var(--aus), opacity 0.3s var(--aus); }
+.themaknopf__sonne { opacity: 0; transform: rotate(-60deg) scale(0.6); }
+[data-theme="dark"] .themaknopf__mond { opacity: 0; transform: rotate(40deg) scale(0.6); }
+[data-theme="dark"] .themaknopf__sonne { opacity: 1; transform: none; }
+[data-theme="dark"] .themaknopf { color: var(--bernstein); }
+[data-theme="dark"] .themaknopf:hover { color: var(--tinte); border-color: var(--schnur); }
+.thema-wechsel, .thema-wechsel *, .thema-wechsel *::before, .thema-wechsel *::after {
+  transition: background-color 0.4s var(--aus), color 0.4s var(--aus), border-color 0.4s var(--aus), fill 0.4s var(--aus);
+}
+@media (max-width: 51.99rem) { .kopf__rechts { gap: 0.6rem; } .themaknopf { width: 2.5rem; height: 2.5rem; } }
+@media (prefers-reduced-motion: reduce) { .themaknopf .z { transition: none; } }
+
+/* ---------- Knöpfe ---------- */
+.knoepfe { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.knopf {
+  display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.85rem 1.4rem; min-height: 3rem; border-radius: 999px;
+  font: 600 0.9375rem/1.2 var(--sans); letter-spacing: 0.02em; text-decoration: none; border: 1px solid var(--tinte);
+  transition: background-color 0.25s var(--aus), transform 0.25s var(--aus);
+}
+.knopf:hover { transform: translateY(-1px); }
+.knopf--voll { background: var(--tinte); color: var(--weiss); }
+.knopf--voll:hover { background: #000; }
+.knopf--linie { background: var(--weiss); color: var(--tinte); }
+.knopf--linie:hover { background: var(--rose-hell); }
+.knopf svg { width: 1.05rem; height: 1.05rem; flex: none; }
+
+.weiter {
+  display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; font-size: 0.9375rem; text-decoration: none;
+  border-bottom: 1px solid var(--linie-fest); padding-bottom: 0.15rem; transition: gap 0.3s var(--aus), border-color 0.2s;
+}
+.weiter:hover { gap: 0.85rem; border-color: var(--rose); }
+.weiter svg { width: 1rem; height: 1rem; }
+
+/* ---------- Abschnitte ---------- */
+.abschnitt { padding-block: var(--raum-l); position: relative; }
+.abschnitt__kopf { display: grid; gap: 1rem; margin-bottom: var(--raum-m); }
+.abschnitt__kopf p { color: var(--leise); }
+.abschnitt__kopf--mitte { justify-items: center; text-align: center; }
+.abschnitt__kopf--mitte p { margin-inline: auto; }
+
+.zier { display: flex; align-items: center; gap: 1rem; color: var(--rose); width: min(100%, 14rem); margin-inline: auto; }
+.zier::before, .zier::after { content: ""; flex: 1; height: 1px; background: var(--linie-fest); }
+.zier .z { width: 1.6rem; height: 1.6rem; flex: none; }
+
+/* ---------- Erster Bildschirm: das Schaufenster ---------- */
+.buehne { padding-block: calc(var(--markise) + clamp(2.5rem, 6vw, 5rem)) var(--raum-l); }
+.buehne__raster { display: grid; gap: var(--raum-m); align-items: center; }
+.buehne__text { display: grid; gap: 1.5rem; justify-items: start; }
+.buehne__text > p { font-size: 1.1875rem; }
+.buehne h1 em { font-style: italic; color: var(--rose); }
+
+.fenster { position: relative; margin: 0 auto; width: min(100%, 27rem); }
+.fenster__glas {
+  border-radius: 13.5rem 13.5rem 0.4rem 0.4rem; overflow: hidden; background: var(--heu-hell);
+  outline: 1px solid var(--tinte); outline-offset: 0.55rem;
+}
+.fenster__glas img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
+.fenster__sims { height: 0.9rem; margin: 0.55rem -1.4rem 0; background: var(--weiss); border: 1px solid var(--tinte); border-radius: 2px; }
+@media (min-width: 52rem) {
+  .buehne__raster { grid-template-columns: 1fr 0.95fr; gap: clamp(4rem, 8vw, 7rem); }
+}
+
+/* Türschild mit den Öffnungszeiten, an einer Schnur */
+.schild {
+  position: relative; width: 14.5rem; padding: 1.1rem 1.2rem 1rem; margin-top: 2.8rem;
+  background: var(--weiss); border: 1px solid var(--tinte); border-radius: 0.6rem; box-shadow: var(--schatten);
+  transform-origin: 50% -2.6rem; transform: rotate(-3deg);
+}
+.schild::before {
+  content: ""; position: absolute; left: 50%; top: -2.75rem; width: 0.6rem; height: 0.6rem; margin-left: -0.3rem;
+  border-radius: 50%; background: var(--tinte);
+}
+.schild__schnur { position: absolute; left: 0; top: -2.45rem; width: 100%; height: 2.45rem; color: var(--schnur); }
+.schild__kopf {
+  font: 600 0.75rem/1.2 var(--sans); letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--rose); text-align: center; margin: 0 auto 0.55rem;
+}
+.schild dl { margin: 0; display: grid; text-align: center; font-variant-numeric: tabular-nums; }
+.schild dt { font-family: var(--serif); font-size: 1.125rem; color: var(--tinte); }
+.schild dd { margin: 0 0 0.45rem; font-size: 0.9375rem; }
+.schild dd:last-child { margin-bottom: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .schild { animation: pendeln 2.8s var(--aus) 0.5s both; }
+  .schild:hover { animation: pendeln 1.8s var(--aus) both; }
+  @keyframes pendeln {
+    0% { transform: rotate(7deg); }
+    35% { transform: rotate(-7deg); }
+    65% { transform: rotate(-1deg); }
+    100% { transform: rotate(-3deg); }
+  }
+}
+@media (min-width: 52rem) {
+  .fenster .schild { position: absolute; left: -6rem; bottom: 3.5rem; margin: 0; }
+}
+@media (max-width: 51.99rem) {
+  .fenster .schild { margin: 3.4rem auto 0; }
+}
+
+/* ---------- Handwerk: Satz mit Zeichen über den Verben ---------- */
+.werkbank { background: var(--heu-hell); }
+.satz {
+  font-family: var(--serif); font-size: clamp(1.4rem, 3vw, 2.25rem); line-height: 1.3; color: var(--tinte);
+  max-width: 30ch; margin-inline: auto; text-align: center;
+}
+.verb { display: inline-flex; flex-direction: column; align-items: center; vertical-align: bottom; margin: 0.4rem 0.02em 0; color: var(--tinte); text-decoration: none; }
+.verb .z { width: clamp(2.6rem, 5vw, 3.6rem); height: clamp(2.6rem, 5vw, 3.6rem); margin-bottom: 0.2rem; stroke-dasharray: 1; stroke-dashoffset: 0; }
+a.verb span { text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: var(--rose); text-underline-offset: 0.16em; }
+a.verb:hover .z { color: var(--rose); }
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .verb .z { animation: zeichnen linear both; animation-timeline: view(); animation-range: entry calc(20% + var(--i, 0) * 4%) cover calc(45% + var(--i, 0) * 3%); }
+  }
+  @keyframes zeichnen { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+}
+
+/* Fotos mit Klebeband */
+.geklebt { position: relative; margin: 0; padding: 0.55rem 0.55rem 0.8rem; background: var(--weiss); box-shadow: var(--schatten); transform: rotate(var(--neigung, 0deg)); }
+.geklebt::before {
+  content: ""; position: absolute; left: 50%; top: -0.7rem; width: 5rem; height: 1.4rem; margin-left: -2.5rem;
+  background: rgb(221 209 179 / 0.8); transform: rotate(-3deg);
+}
+.geklebt img { width: 100%; object-fit: cover; }
+.geklebt figcaption { padding-top: 0.6rem; font-size: 0.875rem; color: var(--leise); line-height: 1.45; }
+.geklebt figcaption b { display: block; font: 400 1.5rem/1.15 var(--serif); color: var(--tinte); }
+
+.verben { display: grid; gap: var(--raum-m); margin-top: var(--raum-l); }
+.verben figure { scroll-margin-top: 8rem; }
+.verben img { aspect-ratio: 4 / 5; }
+.verben figure:nth-child(1) { --neigung: -1.5deg; }
+.verben figure:nth-child(2) { --neigung: 1.2deg; }
+.verben figure:nth-child(3) { --neigung: -0.8deg; }
+@media (min-width: 40rem) { .verben { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 60rem) { .verben figure:nth-child(2) { margin-top: 3rem; } }
+
+/* ---------- Beratung und Transport: das Velo ---------- */
+.dienst { display: grid; gap: var(--raum-l) var(--raum-m); align-items: center; }
+.dienst__text { display: grid; gap: 1.25rem; justify-items: start; }
+.strasse { position: relative; width: 100%; max-width: 22rem; padding-bottom: 0.4rem; }
+.strasse::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0.45rem; height: 1px;
+  background: linear-gradient(90deg, var(--linie-fest) 0 60%, transparent 0) repeat-x 0 0 / 0.9rem 1px;
+}
+.strasse .z { width: clamp(8rem, 20vw, 10.5rem); height: auto; aspect-ratio: 3 / 2; color: var(--tinte); }
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .strasse .z { animation: fahren linear both; animation-timeline: view(); animation-range: entry 0% cover 45%; }
+    @keyframes fahren { from { transform: translateX(-40%); opacity: 0; } 30% { opacity: 1; } to { transform: translateX(0); } }
+  }
+}
+.dienst__bilder { display: grid; grid-template-columns: 1.1fr 1fr; gap: var(--raum-m) var(--raum-s); align-items: start; }
+.dienst__bilder .geklebt:nth-child(1) { --neigung: -2deg; grid-row: span 2; }
+.dienst__bilder .geklebt:nth-child(2) { --neigung: 2deg; margin-top: 1.5rem; }
+.dienst__bilder .geklebt:nth-child(3) { --neigung: -1deg; }
+.dienst__bilder .geklebt:nth-child(1) img { aspect-ratio: 9 / 16; }
+.dienst__bilder .geklebt:not(:nth-child(1)) img { aspect-ratio: 1; }
+@media (min-width: 52rem) { .dienst { grid-template-columns: 1fr 1fr; gap: clamp(3rem, 7vw, 6rem); } }
+
+/* ---------- Besuch: weisses Feld auf dem Heu ---------- */
+.besuch { padding-block: var(--raum-l); background: var(--heu) url(assets/bilder/heu.jpg) center / cover no-repeat; }
+.besuch__feld {
+  background: var(--weiss); padding: clamp(1.5rem, 5vw, 3.5rem); display: grid; gap: var(--raum-m);
+  max-width: 64rem; margin-inline: auto; border-radius: 0.5rem; box-shadow: 0 1.5rem 3rem -1.5rem rgb(60 50 30 / 0.4);
+}
+.besuch__info { display: grid; gap: 1.25rem; align-content: start; justify-items: start; }
+.adresse { font-style: normal; font-size: 1.125rem; color: var(--tinte); }
+.besuch__wege { display: grid; gap: 2.5rem; align-content: start; justify-items: center; }
+.besuch__wege .geklebt { --neigung: 1.5deg; max-width: 20rem; }
+.besuch__wege .geklebt img { aspect-ratio: 4 / 3; }
+@media (min-width: 52rem) { .besuch__feld { grid-template-columns: 1.15fr 0.85fr; } }
+
+.zeiten { margin: 0; display: grid; grid-template-columns: auto auto; gap: 0.1rem 1.5rem; font-variant-numeric: tabular-nums; }
+.zeiten dt { color: var(--tinte); }
+.zeiten dd { margin: 0; }
+
+.gassenschild { display: inline-block; padding: 0.3rem; background: var(--gassenblau); border-radius: 0.3rem; box-shadow: var(--schatten); transform: rotate(-1deg); }
+.gassenschild span {
+  display: block; padding: 0.3rem 1rem 0.35rem; border: 1px solid rgb(255 255 255 / 0.9); border-radius: 0.2rem;
+  color: var(--weiss); font: 600 1.2rem/1.1 var(--sans); letter-spacing: 0.03em;
+}
+
+.halt { display: grid; grid-template-columns: auto 1fr; gap: 0.2rem 1rem; align-items: center; }
+.halt .z { width: 4.5rem; height: auto; aspect-ratio: 4 / 3; grid-row: span 2; color: var(--tinte); }
+.halt__name { font: 400 1.375rem/1.1 var(--serif); color: var(--tinte); }
+.halt__linien { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; font-size: 0.9375rem; color: var(--leise); }
+.linie { display: inline-grid; place-items: center; min-width: 1.75rem; height: 1.75rem; padding-inline: 0.3rem; border-radius: 999px; background: var(--tinte); color: var(--weiss); font: 600 0.875rem/1 var(--sans); }
+
+.kontaktliste { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.35rem; }
+.kontaktliste a { font-weight: 600; }
+
+/* ---------- Unterseiten ---------- */
+.seitenkopf { padding-block: calc(var(--markise) + clamp(2.5rem, 5vw, 4rem)) var(--raum-m); }
+.seitenkopf .huelle { display: grid; gap: 1rem; justify-items: start; }
+.seitenkopf p:not(.pfad) { font-size: 1.1875rem; }
+.pfad { font-size: 0.875rem; color: var(--leise); }
+.pfad a { color: var(--leise); }
+
+.abschnitt--heu { background: var(--heu-hell); }
+
+.galerie { columns: 2 11rem; column-gap: var(--raum-m); padding-top: 0.8rem; }
+.galerie .geklebt { display: inline-block; width: 100%; margin: 0.9rem 0 var(--raum-m); break-inside: avoid; }
+.galerie .geklebt:nth-child(3n+1) { --neigung: -1.2deg; }
+.galerie .geklebt:nth-child(3n+2) { --neigung: 1deg; }
+.galerie .geklebt:nth-child(3n) { --neigung: -0.4deg; }
+@media (min-width: 60rem) { .galerie--weit { columns: 3; } }
+
+.angabe-folgt { color: var(--leise); font-style: italic; }
+
+/* ---------- Fuss ---------- */
+.fuss { background: var(--weiss); border-top: 1px solid var(--linie); padding-block: var(--raum-m) 2rem; font-size: 0.9375rem; }
+.fuss .zier { margin-bottom: var(--raum-m); }
+.fuss__raster { display: grid; gap: 2rem; }
+.fuss__raster img { width: 12rem; }
+.fuss h2 { font: 500 1.125rem/1.3 var(--serif); color: var(--tinte); margin-bottom: 0.5rem; }
+.fuss ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.25rem; }
+.fuss address { font-style: normal; }
+.fuss__unten {
+  display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; justify-content: space-between; margin-top: var(--raum-m);
+  padding-top: 1.25rem; border-top: 1px solid var(--linie); color: var(--leise); font-size: 0.875rem;
+}
+.fuss__unten a { color: var(--leise); }
+@media (min-width: 52rem) { .fuss__raster { grid-template-columns: 1.4fr 1fr 1fr 1fr; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+/* Ohne scroll-gesteuerte Animation: zeichnen.js setzt .zeichnet und .gezeichnet */
+.zeichnet .satz .verb .z { stroke-dashoffset: 1; transition: stroke-dashoffset 1.4s var(--aus) calc(var(--i, 0) * 0.12s); }
+.zeichnet .satz.gezeichnet .verb .z { stroke-dashoffset: 0; }
+.zeichnet .strasse .z { transform: translateX(-40%); opacity: 0; transition: transform 1.6s var(--aus), opacity 0.8s; }
+.zeichnet .strasse.gezeichnet .z { transform: none; opacity: 1; }
+.z--pfeil { width: 1rem; height: 1rem; }
+.besuch__wege .schild { margin-top: 3rem; }
+.satz__teil { white-space: nowrap; }
+.mitte { margin: var(--raum-m) auto 0; max-width: none; text-align: center; }
+
+/* =================================================================
+   Der Rundgang
+   ================================================================= */
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Anfahrt unter den Knöpfen der Startseite */
+.anfahrt {
+  display: flex; align-items: center; gap: 0.9rem; margin-top: 0.75rem; padding-top: 1.25rem; border-top: 1px solid var(--linie);
+  text-decoration: none; color: var(--leise); font-size: 0.9375rem; width: 100%; max-width: 28rem;
+}
+.anfahrt .z { width: 3.4rem; height: auto; aspect-ratio: 4 / 3; flex: none; color: var(--tinte); }
+.anfahrt b { display: block; font-weight: 600; color: var(--tinte); }
+.anfahrt .linie { margin-right: 0.3rem; vertical-align: 0.05em; }
+.anfahrt:hover b { text-decoration: underline; text-decoration-color: var(--rose); text-underline-offset: 0.2em; }
+
+/* Stationen des Rundgangs */
+.rundgang { background: var(--heu-hell); padding-block: var(--raum-l); }
+.stationen { list-style: none; margin: 0; padding: 0; display: grid; gap: 2.5rem 1.5rem; position: relative; }
+.station { display: grid; justify-items: center; text-align: center; gap: 0.5rem; text-decoration: none; color: inherit; }
+.station__kreis {
+  display: grid; place-items: center; width: 6.4rem; height: 6.4rem; border-radius: 50%; margin-bottom: 0.6rem;
+  background: var(--weiss); border: 1px solid var(--tinte); position: relative; z-index: 1;
+  transition: background-color 0.3s, transform 0.5s var(--aus);
+}
+.station__kreis .z { width: 3rem; height: 3rem; color: var(--tinte); }
+.station__seite { font: 600 0.6875rem/1 var(--sans); letter-spacing: 0.14em; text-transform: uppercase; color: var(--rose); }
+.station h3 { font-size: 1.375rem; }
+.station p { font-size: 0.9375rem; color: var(--leise); max-width: 16rem; }
+.station:hover .station__kreis { background: var(--rose-hell); transform: rotate(-6deg); }
+.station:hover h3 { text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: var(--rose); text-underline-offset: 0.18em; }
+@media (min-width: 40rem) { .stationen { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 60rem) {
+  .stationen { grid-template-columns: repeat(4, 1fr); }
+  .stationen::before { content: ""; position: absolute; left: 12.5%; right: 12.5%; top: 3.2rem; border-top: 2px dashed var(--heu-tief); }
+}
+
+/* Gemeinsamer Seitenkopf der Orte */
+.seitenkopf .huelle { justify-items: center; text-align: center; }
+.seitenkopf .huelle > p:not(.pfad):not(.ort) { margin-inline: auto; color: var(--leise); }
+.ort {
+  display: inline-flex; align-items: center; gap: 0.5rem; font: 600 0.75rem/1 var(--sans);
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--rose);
+}
+.ort .z { width: 1.6rem; height: 1.6rem; }
+.seitenkopf h1 { max-width: 20ch; }
+
+/* ---------- Angebot: das Regal ---------- */
+.regal {
+  list-style: none; margin: var(--raum-m) auto 0; padding: 0; max-width: 60rem;
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 3.5rem 0;
+}
+.ding { grid-column: span 2; }
+.ding:nth-child(4) { grid-column: 2 / span 2; }
+.ding a { display: grid; justify-items: center; text-decoration: none; color: inherit; padding-inline: clamp(0.5rem, 2vw, 1.5rem); }
+.ding__rahmen { display: block; overflow: hidden; background: var(--heu-hell); border: 1px solid var(--tinte); box-shadow: var(--schatten); transition: transform 0.5s var(--aus); position: relative; z-index: 1; }
+.ding__rahmen img { width: 100%; height: 100%; object-fit: cover; }
+.ding--hoch .ding__rahmen { width: 74%; aspect-ratio: 3 / 4; outline: 1px solid var(--tinte); outline-offset: -0.5rem; }
+.ding--rund .ding__rahmen { width: 86%; aspect-ratio: 1; border-radius: 50%; margin-top: auto; }
+.ding--bogen .ding__rahmen { width: 70%; aspect-ratio: 4 / 5; border-radius: 10rem 10rem 0.3rem 0.3rem; }
+.ding a { grid-template-rows: 1fr auto auto; height: 100%; align-items: end; }
+.ding__brett {
+  display: block; width: calc(100% + 2 * clamp(0.5rem, 2vw, 1.5rem)); height: 1.1rem; margin-top: -0.1rem;
+  background: linear-gradient(#cdb991, #b39f78); border-bottom: 2px solid #9d8a64;
+  box-shadow: 0 0.7rem 0.9rem -0.5rem rgb(60 48 28 / 0.45);
+}
+.anhaenger {
+  position: relative; margin-top: 1.7rem; padding: 0.45rem 1rem 0.5rem; background: var(--weiss);
+  border: 1px solid var(--linie-fest); border-radius: 0.3rem; font: 400 1.125rem/1.2 var(--serif); color: var(--tinte);
+  transform: rotate(-2deg); transform-origin: 50% -1.7rem; transition: transform 0.6s var(--aus), background-color 0.3s;
+}
+.ding:nth-child(even) .anhaenger { transform: rotate(2deg); }
+.anhaenger::before { content: ""; position: absolute; left: 50%; top: -1.75rem; height: 1.75rem; border-left: 1px solid var(--schnur); }
+.anhaenger::after { content: ""; position: absolute; left: 50%; top: 0.3rem; width: 0.35rem; height: 0.35rem; margin-left: -0.175rem; border-radius: 50%; border: 1px solid var(--linie-fest); }
+.ding a:hover .ding__rahmen { transform: translateY(-0.3rem); }
+.ding a:hover .anhaenger, .ding a:focus-visible .anhaenger { background: var(--rose-hell); transform: rotate(0deg); }
+.ding a:focus-visible { outline-offset: 0.5rem; }
+@media (max-width: 47.99rem) {
+  .regal { grid-template-columns: repeat(2, 1fr); gap: 3rem 0; }
+  .ding, .ding:nth-child(4) { grid-column: auto; }
+  .ding:nth-child(5) { grid-column: 1 / -1; width: 50%; justify-self: center; }
+}
+
+/* Die fünf Fächer, jedes mit eigener Anordnung */
+.fach { padding-block: var(--raum-l); scroll-margin-top: 6rem; }
+.fach--heu { background: var(--heu-hell); }
+.fach__nr { font: 600 0.6875rem/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--rose); }
+.fach__text { display: grid; gap: 1rem; align-content: start; justify-items: start; }
+.fach .z:not(.z--pfeil) { width: 2.8rem; height: 2.8rem; color: var(--tinte); }
+.fach .notiz { font-size: 1rem; color: var(--leise); padding-top: 1rem; border-top: 1px solid var(--linie); }
+
+.fach--collage { display: grid; gap: var(--raum-m); }
+@media (min-width: 60rem) {
+  .fach--collage { grid-template-columns: 19rem 1fr; gap: clamp(3rem, 6vw, 5rem); }
+  .fach--collage .fach__text { position: sticky; top: 9rem; }
+}
+
+.raumbild { display: grid; gap: var(--raum-m); }
+.raumbild__gross { border-radius: 0.4rem; overflow: hidden; }
+.raumbild__gross img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.raumbild__karte {
+  display: grid; gap: 1rem; justify-items: start; background: var(--weiss); padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid var(--linie-fest); border-radius: 0.4rem; box-shadow: var(--schatten);
+}
+.raumbild__klein { display: grid; grid-template-columns: 1fr 1fr; gap: var(--raum-s); }
+.raumbild__klein .geklebt:nth-child(1) { --neigung: -2deg; }
+.raumbild__klein .geklebt:nth-child(2) { --neigung: 1.5deg; margin-top: 1.5rem; }
+.raumbild__klein img { aspect-ratio: 1; }
+@media (min-width: 60rem) {
+  .raumbild { grid-template-columns: 7fr 5fr; grid-template-rows: auto auto; gap: 0 var(--raum-m); }
+  .raumbild__gross { grid-row: 1 / span 2; }
+  .raumbild__karte { margin-top: 3rem; margin-left: -6rem; position: relative; z-index: 1; }
+  .raumbild__klein { margin-top: var(--raum-m); align-self: start; }
+}
+
+.anlass { display: grid; gap: var(--raum-m); justify-items: center; text-align: center; }
+.anlass__text { display: grid; gap: 1rem; justify-items: center; max-width: 40rem; }
+.anlass__botschaft { font: italic 400 clamp(1.3rem, 2.6vw, 1.75rem)/1.3 var(--serif); color: var(--tinte); }
+.faecher { display: flex; justify-content: center; width: 100%; max-width: 46rem; padding-top: 1rem; }
+.faecher .geklebt { width: 38%; flex: none; }
+.faecher .geklebt img { aspect-ratio: 4 / 5; }
+.faecher .geklebt:nth-child(1) { --neigung: -7deg; margin-right: -6%; margin-top: 2rem; }
+.faecher .geklebt:nth-child(2) { --neigung: 0deg; z-index: 1; }
+.faecher .geklebt:nth-child(3) { --neigung: 6deg; margin-left: -6%; margin-top: 2.5rem; }
+
+.fach__zeile { display: grid; gap: 1.25rem; margin-bottom: var(--raum-m); }
+.fach__zeile > div:first-child { display: grid; gap: 1rem; justify-items: start; }
+.fach__spalte { display: grid; gap: 1rem; }
+@media (min-width: 52rem) { .fach__zeile { grid-template-columns: 1fr 1.4fr; align-items: end; gap: var(--raum-m); } }
+.nischen { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--raum-s); }
+.nischen li {
+  border-radius: 20rem 20rem 0.3rem 0.3rem; overflow: hidden; background: var(--weiss);
+  outline: 1px solid var(--tinte); outline-offset: 0.4rem; margin: 0.4rem;
+}
+.nischen img { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; }
+.nischen li:nth-child(2) { margin-top: 2rem; }
+
+.terrasse { display: grid; gap: var(--raum-m); align-items: center; }
+.terrasse__bilder { position: relative; display: grid; grid-template-columns: 1.3fr 1fr; align-items: end; }
+.terrasse__a { border-radius: 0.4rem; overflow: hidden; }
+.terrasse__a img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
+.terrasse__b { margin-left: -18%; margin-bottom: -1.5rem; border: 0.5rem solid var(--weiss); border-radius: 50%; overflow: hidden; box-shadow: var(--schatten); }
+.terrasse__b img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+@media (min-width: 52rem) { .terrasse { grid-template-columns: 1.2fr 1fr; gap: clamp(3rem, 7vw, 6rem); } }
+
+.dienst--knapp { grid-template-columns: 1fr; justify-items: start; }
+@media (min-width: 52rem) { .dienst--knapp { grid-template-columns: 1.4fr auto; align-items: end; } }
+
+/* ---------- Handwerk: der Werktisch ---------- */
+.werktisch-bereich { padding-bottom: var(--raum-l); }
+.werktisch {
+  position: relative; padding: clamp(2.5rem, 5vw, 3.5rem) clamp(1rem, 4vw, 3rem) clamp(2rem, 5vw, 3.5rem);
+  background-color: #efe8d6;
+  background-image: linear-gradient(rgb(138 122 92 / 0.18) 1px, transparent 1px), linear-gradient(90deg, rgb(138 122 92 / 0.18) 1px, transparent 1px);
+  background-size: 2rem 2rem; background-position: -1px -1px;
+  border: 1px solid var(--heu-tief); border-radius: 0.6rem; box-shadow: inset 0 0 0 0.5rem rgb(255 255 255 / 0.35);
+}
+.werktisch__lineal {
+  position: absolute; left: 1.25rem; right: 1.25rem; top: 0.9rem; height: 0.8rem;
+  background: repeating-linear-gradient(90deg, var(--schnur) 0 1px, transparent 1px 0.5rem) bottom / 100% 0.35rem no-repeat,
+              repeating-linear-gradient(90deg, var(--schnur) 0 1px, transparent 1px 2.5rem) bottom / 100% 0.8rem no-repeat;
+  opacity: 0.6;
+}
+.werkzeuge { list-style: none; margin: 0 0 var(--raum-m); padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 0.5rem; }
+@media (min-width: 52rem) { .werkzeuge { grid-template-columns: repeat(7, 1fr); } }
+.werkzeug { display: grid; justify-items: center; gap: 0.45rem; text-decoration: none; color: var(--tinte); }
+.werkzeug__kreis {
+  display: grid; place-items: center; width: 4.6rem; height: 4.6rem; border-radius: 50%; background: var(--weiss);
+  border: 1px solid var(--tinte); transform: rotate(-5deg); transition: transform 0.5s var(--aus), background-color 0.3s;
+}
+.werkzeuge li:nth-child(even) .werkzeug__kreis { transform: rotate(5deg); }
+.werkzeug__kreis .z { width: 2.6rem; height: 2.6rem; }
+.werkzeug__name { font: italic 400 1.125rem/1.2 var(--serif); }
+a.werkzeug .werkzeug__name { text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: var(--rose); text-underline-offset: 0.18em; }
+a.werkzeug:hover .werkzeug__kreis { background: var(--rose-hell); transform: rotate(0); }
+
+.polas { display: grid; gap: var(--raum-m); max-width: 60rem; margin-inline: auto; }
+@media (min-width: 40rem) { .polas { grid-template-columns: repeat(3, 1fr); } }
+.pola {
+  position: relative; margin: 0; padding: 0.7rem 0.7rem 1rem; background: var(--weiss); box-shadow: var(--schatten);
+  transform: rotate(var(--neigung, 0deg)); scroll-margin-top: 8rem;
+}
+.pola::before {
+  content: ""; position: absolute; left: 50%; top: -0.45rem; width: 0.9rem; height: 0.9rem; margin-left: -0.45rem;
+  border-radius: 50%; background: radial-gradient(circle at 35% 35%, #d77b97, var(--rose) 60%); box-shadow: 0 0.15rem 0.2rem rgb(0 0 0 / 0.3);
+}
+.pola img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+.pola figcaption { padding-top: 0.7rem; font-size: 0.875rem; color: var(--leise); line-height: 1.45; }
+.pola figcaption b { display: block; font: 400 1.5rem/1.15 var(--serif); color: var(--tinte); }
+.pola:nth-child(1) { --neigung: -2.5deg; }
+.pola:nth-child(2) { --neigung: 1.5deg; }
+.pola:nth-child(3) { --neigung: -1deg; }
+@media (min-width: 40rem) { .pola:nth-child(2) { margin-top: 2.5rem; } }
+.pola:target { outline: 2px solid var(--rose); outline-offset: 0.4rem; }
+
+/* ---------- Laden: die Gasse ---------- */
+.hausnummer {
+  display: grid; place-items: center; width: 2.6rem; height: 2rem; background: var(--gassenblau); color: var(--weiss);
+  border: 2px solid var(--weiss); outline: 1px solid var(--gassenblau); border-radius: 0.25rem; font: 600 1.05rem/1 var(--sans);
+}
+
+.hier { display: grid; gap: var(--raum-m); align-items: center; }
+.hier__text { display: grid; gap: 1.25rem; justify-items: start; }
+.hier .geklebt { --neigung: 1.5deg; max-width: 26rem; justify-self: center; }
+.hier .geklebt img { aspect-ratio: 4 / 3; }
+@media (min-width: 52rem) { .hier { grid-template-columns: 1fr 1fr; } }
+
+/* Blumen für die Kunst: zwei Jahre als Wandtext (Anleihe aus Richtung A) */
+.wandtext { display: grid; gap: var(--raum-m); align-items: center; max-width: 60rem; margin-inline: auto; }
+.wandtext__jahre { display: flex; gap: clamp(1rem, 4vw, 3rem); font: 400 clamp(4rem, 13vw, 9rem)/0.9 var(--serif); color: var(--tinte); letter-spacing: -0.03em; }
+.wandtext__jahre span:last-child { color: var(--rose); font-style: italic; }
+.wandtext__text { display: grid; gap: 1rem; justify-items: start; padding-left: 1.5rem; border-left: 1px solid var(--tinte); }
+.wandtext__text .z { width: 2.6rem; height: 2.6rem; color: var(--tinte); }
+@media (min-width: 60rem) { .wandtext { grid-template-columns: auto 1fr; } }
+
+/* ---------- Kontakt: die Ladentür ---------- */
+.eingang { padding-top: calc(var(--markise) + clamp(2.5rem, 5vw, 4rem)); }
+.eingang__raster { display: grid; gap: var(--raum-m); align-items: end; }
+.eingang__text { display: grid; gap: 1.25rem; justify-items: start; padding-bottom: 2rem; }
+.eingang__text > p:not(.pfad):not(.gassenschild) { font-size: 1.1875rem; }
+.tuer {
+  position: relative; width: min(100%, 20rem); aspect-ratio: 20 / 31; margin-inline: auto; justify-self: center;
+  background: #2d2a26; border-radius: 10rem 10rem 0 0; padding: 1.4rem 1.4rem 0;
+  box-shadow: inset 0 0 0 0.45rem #3b3732, 0 1rem 2rem -1rem rgb(30 25 20 / 0.5);
+}
+.tuer__glas { height: 56%; border-radius: 8.6rem 8.6rem 0.2rem 0.2rem; overflow: hidden; border: 0.3rem solid #4a453e; background: var(--heu-hell); }
+.tuer__glas img { width: 100%; height: 100%; object-fit: cover; }
+.tuer .schild { position: absolute; left: 50%; top: 40%; margin: 0 0 0 -6.5rem; width: 13rem; padding: 0.8rem 0.9rem; }
+.tuer .schild dt { font-size: 1rem; }
+.tuer .schild dd { font-size: 0.875rem; margin-bottom: 0.3rem; }
+.tuer__schlitz {
+  position: absolute; left: 50%; bottom: 17%; width: 46%; margin-left: -23%; display: grid; place-items: center;
+  padding: 0.35rem 0; background: #b8a27a; border-radius: 0.2rem; color: #2d2a26; text-decoration: none;
+  font: 600 0.625rem/1 var(--sans); letter-spacing: 0.2em; text-transform: uppercase;
+  box-shadow: inset 0 -0.25rem 0 #8f7a55; transition: background-color 0.25s;
+}
+.tuer__schlitz:hover { background: #d6c39b; }
+.tuer__schlitz:focus-visible { outline-color: var(--weiss); }
+.tuer__knauf { position: absolute; right: 1.6rem; top: 66%; width: 1rem; height: 1rem; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #e9d9a8, #a8905a); }
+.schwelle { height: 0.9rem; background: #b39f78; border-top: 2px solid #8f7a55; border-radius: 0.15rem; box-shadow: 0 0.6rem 1rem -0.5rem rgb(60 48 28 / 0.4); }
+@media (min-width: 52rem) {
+  .eingang__raster { grid-template-columns: auto 1fr; gap: clamp(3rem, 7vw, 6rem); padding-inline: clamp(1rem, 6vw, 5rem); }
+  .tuer { width: 20rem; }
+}
+@media (max-width: 51.99rem) {
+  .eingang__raster { display: flex; flex-direction: column-reverse; align-items: stretch; }
+  .tuer { width: min(100%, 18rem); }
+}
+
+.brief {
+  position: relative; display: grid; gap: 1.25rem; justify-items: start; max-width: 46rem; margin-inline: auto;
+  padding: clamp(1.75rem, 4vw, 3rem); background: var(--weiss); border: 1px solid var(--linie-fest); box-shadow: var(--schatten);
+}
+.brief::before {
+  content: ""; position: absolute; inset: 0.5rem; pointer-events: none;
+  border: 1px solid transparent; border-image: repeating-linear-gradient(135deg, var(--rose) 0 0.6rem, transparent 0.6rem 1.2rem, var(--gassenblau) 1.2rem 1.8rem, transparent 1.8rem 2.4rem) 1;
+  opacity: 0.5;
+}
+.brief__marke {
+  position: absolute; right: clamp(1rem, 3vw, 2rem); top: clamp(1rem, 3vw, 2rem); width: 4rem; height: 4.8rem;
+  display: grid; place-items: center; background: var(--rose-hell); color: var(--rose); transform: rotate(4deg);
+  outline: 1px dashed var(--rose); outline-offset: -0.3rem;
+}
+.brief__marke .z { width: 2.4rem; height: 2.4rem; }
+.brief h2 { padding-right: 5rem; }
+.brief__zeilen { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; }
+.brief__zeilen li { padding: 0.55rem 0 0.35rem; border-bottom: 1px solid var(--linie); color: var(--leise); font: italic 400 1.0625rem/1.3 var(--serif); }
+.brief__zeilen li::after { content: ":"; }
+
+/* ---------- Impressum, Datenschutz: der Aushang ---------- */
+.abschnitt--knapp { padding-block: var(--raum-m) var(--raum-l); }
+.aushang {
+  position: relative; display: grid; gap: 0.9rem; max-width: 40rem; margin: 1.5rem auto 0;
+  padding: clamp(1.75rem, 4vw, 2.75rem); background: var(--weiss); border: 1px solid var(--linie-fest);
+  box-shadow: var(--schatten); transform: rotate(-0.4deg);
+}
+.aushang::before, .aushang::after {
+  content: ""; position: absolute; top: -0.7rem; width: 5rem; height: 1.4rem; background: rgb(221 209 179 / 0.85);
+}
+.aushang::before { left: 1.5rem; transform: rotate(-4deg); }
+.aushang::after { right: 1.5rem; transform: rotate(3deg); }
+.aushang h2 { font-size: 1.375rem; margin-top: 0.6rem; }
+.aushang h2:first-child { margin-top: 0; }
+@media (max-width: 51.99rem) {
+  .fenster { width: min(100% - 1.2rem, 22rem); }
+  .fenster__sims { margin-inline: -0.6rem; }
+}
+
+/* ---------- Laden: die Brunngasse hinauf ---------- */
+/* Alles in em, damit eine Schriftgrösse die ganze Gasse skaliert. */
+/* ---------- Fassade Brunngasse 13 ---------- */
+.f13 {
+  position: relative; width: 30em; flex: none;
+  background: #fbfaf6; box-shadow: inset 0 0 0 1px var(--tinte);
+  color: var(--tinte);
+}
+.f13__traufe, .nh__traufe {
+  height: 2.6em; margin-inline: -1.2em; position: relative;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 2.2em, rgb(0 0 0 / 0.22) 2.2em 2.6em) 0 100% / 100% 1.1em no-repeat,
+    linear-gradient(#5b4d3e, #6d5d4b);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  border-bottom: 1px solid var(--tinte);
+}
+.f13__wand { padding: 2.2em 2.6em 0.4em; display: grid; gap: 2em; }
+.geschoss { display: grid; grid-template-columns: repeat(var(--n, 3), 1fr); justify-items: center; }
+
+/* Fenster mit Läden und Blumenkasten */
+.fl {
+  --laden: #5f7466;
+  position: relative; display: block; width: 4.6em; height: 6.6em;
+  background:
+    linear-gradient(90deg, transparent calc(50% - 0.12em), #fff 0 calc(50% + 0.12em), transparent 0),
+    linear-gradient(transparent 36%, #fff 0 calc(36% + 0.24em), transparent 0),
+    linear-gradient(160deg, #dfe6e6 0%, #b8c4c6 55%, #9fadb0 100%);
+  border: 0.3em solid #fff; box-shadow: 0 0 0 1px var(--tinte), inset 0 0.5em 0.6em -0.3em rgb(0 0 0 / 0.25);
+}
+.fl::before, .fl::after {
+  content: ""; position: absolute; top: -0.3em; bottom: -0.3em; width: 2.2em;
+  background: repeating-linear-gradient(var(--laden) 0 0.42em, rgb(0 0 0 / 0.28) 0.42em 0.52em);
+  box-shadow: 0 0 0 1px var(--tinte);
+}
+.fl::before { right: calc(100% + 0.35em); }
+.fl::after { left: calc(100% + 0.35em); }
+.fl i {
+  position: absolute; left: -0.7em; right: -0.7em; bottom: -1.2em; height: 1em;
+  background: #7a5a43; box-shadow: 0 0 0 1px var(--tinte);
+}
+.fl i::before {
+  content: ""; position: absolute; left: 0.2em; right: 0.2em; bottom: 100%; height: 1.2em;
+  background:
+    radial-gradient(circle at 12% 60%, var(--rose) 0.28em, transparent 0.3em),
+    radial-gradient(circle at 30% 30%, #d77a92 0.3em, transparent 0.32em),
+    radial-gradient(circle at 50% 65%, var(--rose) 0.28em, transparent 0.3em),
+    radial-gradient(circle at 70% 35%, #e6a5b5 0.3em, transparent 0.32em),
+    radial-gradient(circle at 88% 62%, var(--rose) 0.28em, transparent 0.3em),
+    radial-gradient(ellipse 50% 45% at 50% 100%, #6f8a5f 98%, transparent);
+}
+.fl--ohne i { display: none; }
+
+.f13__gurt { height: 0.7em; margin: 1.6em -0.3em 0; background: var(--heu); box-shadow: 0 0 0 1px var(--tinte); }
+.f13__laden { position: relative; padding: 1em 1.4em 0; display: grid; gap: 0; }
+.f13__schild { display: grid; place-items: center; padding: 0.55em 1em; margin: 0 2.4em 0.6em; background: #fff; box-shadow: 0 0 0 1px var(--tinte); }
+.f13__schild img { width: 17em; height: auto; }
+.f13__markise {
+  height: 2.2em; margin-inline: -0.6em; position: relative; z-index: 1;
+  background: url(assets/markise.svg) repeat-x 0 0 / 3.2em 2.2em;
+  filter: drop-shadow(0 0.35em 0.25em rgb(60 48 28 / 0.28));
+}
+.f13__front {
+  display: grid; grid-template-columns: 1fr 6.8em; gap: 0.6em; height: 12.5em; margin-top: -0.9em;
+  padding: 1.1em 0.6em 0; background: #2b2723; box-shadow: 0 0 0 1px var(--tinte);
+}
+.f13__front figure { margin: 0; position: relative; overflow: hidden; background: #3a332c; box-shadow: inset 0 0 0 0.2em #1b1815; }
+.f13__front img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.f13__tuer::after {
+  content: ""; position: absolute; right: 0.7em; top: 52%; width: 0.35em; height: 1.4em; border-radius: 0.2em; background: #c9a95c;
+}
+.f13 .hausnummer {
+  position: absolute; right: 0.55em; top: 1.15em; width: 2.9em; height: 2.2em; font-size: 1em;
+  border-width: 0.15em; outline-width: 1px; border-radius: 0.28em;
+}
+.f13__sockel, .nh__sockel {
+  height: 1.6em;
+  background: repeating-linear-gradient(90deg, #cfc6b4 0 3.6em, #b8ae99 3.6em 3.7em), #cfc6b4;
+  box-shadow: 0 0 0 1px var(--tinte);
+}
+
+/* ---------- Nachbarhäuser ---------- */
+.nh {
+  --wand: #ece4d2; position: relative; display: flex; flex-direction: column; flex: none;
+  background: var(--wand); box-shadow: inset 0 0 0 1px var(--tinte);
+}
+.nh__wand { flex: 1; display: grid; align-content: start; gap: 2em; padding: 2.2em 1.8em 0; }
+.nh__parterre { height: 12em; display: flex; align-items: flex-end; justify-content: space-around; gap: 1em; padding: 0 1.4em; border-top: 0.6em solid rgb(0 0 0 / 0.08); }
+.nh__tuer { width: 4.4em; height: 8.6em; background: linear-gradient(90deg, #4c3b2d 48%, #3b2e23 0 52%, #4c3b2d 0); border-radius: 2.2em 2.2em 0 0; box-shadow: 0 0 0 1px var(--tinte); }
+.nh__auslage { flex: 1; max-width: 13em; height: 8.6em; background: linear-gradient(160deg, #e8ecea, #b9c3c3); border: 0.4em solid #3f3a35; box-shadow: 0 0 0 1px var(--tinte); }
+.nh--a { --wand: #e9dcc3; }
+.nh--b { --wand: #efd9d2; }
+.nh--b .fl { --laden: #8a4b3c; }
+.nh--c { --wand: #dfe2d2; }
+.nh--c .fl { --laden: #6f7378; }
+.nh--d { --wand: #f0e6cf; }
+.nh--d .fl { --laden: #5a6b80; }
+.nh--e { --wand: #e6e1d8; }
+.nh--e .fl { --laden: #7d6a4f; }
+
+/* Die Gasse hinauf: ohne Skript stehen die Bilder als Raster da, mit Skript geht man beim Scrollen bis zur 13 */
+.weg { font-size: clamp(9px, 2.7vw, 15px); padding-block: var(--raum-m); }
+.weg__welt { display: grid; justify-items: center; gap: var(--raum-m); }
+.weg__boden, .weg__himmel, .weg__hinweis, .weg__seiten { display: none; }
+.aushaenge { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 1.5rem; width: min(100% - 2 * var(--rand), 60rem); margin: 0; padding: 0; list-style: none; }
+.weg .aushang { margin: 0; font-size: 1rem; }
+.weg .aushang img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; border: 0.5em solid #fff; box-shadow: 0 0 0 1px var(--tinte), var(--schatten); }
+.weg .aushang figcaption { margin-top: 0.5em; font-size: 0.875rem; color: var(--leise); }
+/* ohne 3D: schlichte Fotos mit Klebstreifen statt der grossen Aushang-Karte vom Impressum */
+.weg:not(.weg--3d) .aushang { display: block; max-width: none; padding: 0.5rem 0.5rem 0.7rem; }
+.weg:not(.weg--3d) .aushang img { border: 0; box-shadow: none; }
+.weg:not(.weg--3d) .aushang::after { content: none; }
+.weg:not(.weg--3d) .aushang::before { left: 50%; width: 4.5rem; margin-left: -2.25rem; }
+
+.weg--3d { height: 620vh; padding: 0; }
+.weg--3d .weg__buehne {
+  position: sticky; top: var(--kopf-h, 0px); height: calc(100svh - var(--kopf-h, 0px)); overflow: hidden;
+  background: #ece3d0;
+}
+.weg--3d .weg__welt { position: absolute; left: 50%; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d; }
+.weg--3d .weg__welt > *, .weg--3d .weg__seiten > *, .weg--3d .aushaenge > * { position: absolute; left: 0; top: 0; transform-origin: 0 0; backface-visibility: hidden; }
+.weg--3d .weg__seiten, .weg--3d .aushaenge { display: block; position: absolute; inset: 0; width: 0; height: 0; padding: 0; transform-style: preserve-3d; }
+.weg--3d .aushang { font-size: inherit; width: 10em; background: #fff; padding: 0.5em 0.5em 0.6em; box-shadow: 0 0 0 1px var(--tinte), 0 1.5em 2em -1em rgb(60 48 28 / 0.4); }
+.weg--3d .aushang img { border: 0; box-shadow: none; }
+.weg--3d .aushang figcaption { font-size: 0.85em; line-height: 1.3; margin-top: 0.45em; color: var(--text); }
+.weg--3d .aushang::after { content: ""; position: absolute; left: 50%; top: 100%; width: 0.35em; height: 6em; margin-left: -0.175em; background: #6d5d4b; }
+.weg--3d .weg__boden {
+  display: block;
+  background:
+    radial-gradient(ellipse 0.9em 0.55em at 50% 50%, #cbbfa6 62%, transparent 68%) 0 0 / 2em 1.3em,
+    radial-gradient(ellipse 0.9em 0.55em at 50% 50%, #cbbfa6 62%, transparent 68%) 1em 0.65em / 2em 1.3em,
+    linear-gradient(90deg, transparent calc(50% - 1.6em), #c3b69b 0 calc(50% - 1.3em), #b3a68a 0 calc(50% + 1.3em), #c3b69b 0 calc(50% + 1.6em), transparent 0),
+    linear-gradient(90deg, #a99c80 0 4em, transparent 4em calc(100% - 4em), #a99c80 0),
+    #ddd2bb;
+}
+.weg--3d .weg__hinweis {
+  display: flex; position: absolute; left: 50%; bottom: 1.5rem; transform: translateX(-50%); z-index: 2;
+  align-items: center; gap: 0.5rem; padding: 0.45rem 0.9rem; border-radius: 2rem;
+  background: rgb(252 251 248 / 0.9); box-shadow: 0 0 0 1px var(--linie); font: 0.875rem var(--sans); color: var(--leise);
+  transition: opacity 0.4s;
+}
+.weg--3d .weg__hinweis .z { width: 1rem; height: 1rem; transform: rotate(90deg); }
+.weg__hinweis { white-space: nowrap; }
+
+/* ---------- Häuser als Körper, Himmel und Ferne ---------- */
+.weg--3d .weg__himmel {
+  display: block; position: absolute; inset: 0; overflow: hidden;
+  background: linear-gradient(#a9c3da 0%, #c9dae6 calc(var(--horizont, 40%) * 0.55), #eef0ea calc(var(--horizont, 40%) * 0.92), #f6efe1 var(--horizont, 40%), #ece3d0 100%);
+}
+.weg__himmel svg { position: absolute; left: -5%; top: 0; width: 115%; height: auto; max-height: 60%; }
+.wolken-linie .wolke { fill: none; stroke: var(--tinte); stroke-width: 2.4; stroke-opacity: 0.55; }
+.wolken-fuell .wolke { fill: #fdfcf9; }
+.voegel path { fill: none; stroke: var(--tinte); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; opacity: 0.7; }
+.weg--3d .nh::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(rgb(52 38 24 / 0.32), transparent 6em),
+    linear-gradient(to top, rgb(52 38 24 / 0.16), transparent 4em),
+    var(--licht, transparent);
+}
+.weg--3d .nh--schatten { --licht: rgb(44 50 86 / 0.11); }
+.dach-unten {
+  background:
+    repeating-linear-gradient(transparent 0 1.7em, rgb(0 0 0 / 0.35) 1.7em 2.2em),
+    linear-gradient(90deg, #3e332a, #574839);
+  box-shadow: inset 0 0 0 1px var(--tinte);
+}
+.dach-stirn {
+  background:
+    repeating-linear-gradient(90deg, transparent 0 1.7em, rgb(0 0 0 / 0.3) 1.7em 2.2em) 0 100% / 100% 1em no-repeat,
+    linear-gradient(#6d5d4b, #5b4d3e);
+  box-shadow: inset 0 0 0 1px var(--tinte);
+}
+.dach-stirn--schatten { filter: brightness(0.86); }
+.giebelwand svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.giebel__wand { stroke: var(--tinte); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.giebel__luke { fill: #c3cdd0; stroke: var(--tinte); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.giebel__kamin { fill: #a46a55; stroke: var(--tinte); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.giebel__ort { fill: none; stroke: #6a3f31; stroke-width: 1.6; stroke-linejoin: miter; filter: drop-shadow(0 0 0.6px var(--tinte)); }
+.erker {
+  position: relative; padding-bottom: 1em; display: grid; align-content: space-evenly; justify-items: center;
+  background: var(--wand); box-shadow: inset 0 0 0 1px var(--tinte); border-top: 1.2em solid #6a3f31;
+}
+.erker .geschoss { --n: 1; }
+.weg--3d .erker::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: var(--licht, transparent); }
+.erker-flanke { box-shadow: inset 0 0 0 1px var(--tinte); }
+.erker-sohle { background: repeating-linear-gradient(#8c7f6c 0 0.9em, #7a6e5d 0.9em 1.1em); box-shadow: inset 0 0 0 1px var(--tinte); }
+.ferne-ebene svg { display: block; width: 100%; height: 100%; }
+.ferne__wand { fill: #d3dbe2; }
+.ferne__luken { fill: #b9c6d2; }
+.ferne__dach { fill: #a9b6c4; }
+
+.giebel__fenster { fill: #c3cdcf; stroke: #fff; stroke-width: 0.3; }
+.giebel__laden { stroke: var(--tinte); stroke-width: 1; vector-effect: non-scaling-stroke; }
+
+.weg--3d .dach-flaeche {
+  position: absolute; left: 0; top: 0; transform-origin: 0 0;
+  backface-visibility: visible;
+  background:
+    repeating-linear-gradient(to bottom, rgb(60 30 22 / 0.28) 0 0.12em, transparent 0.12em 1.1em),
+    linear-gradient(to bottom, #a3604a, #8c4f3d);
+}
+.weg--3d .dach-flaeche--schatten { filter: brightness(0.86); }
+
+.weg__ferne { display: none; }
+.weg--3d .weg__ferne { display: block; position: absolute; left: 0; top: 0; width: 0; height: 0; transform-origin: 0 0; }
+
+.weg--3d .nh-rahmen { overflow: hidden; }
+.weg--3d .nh-rahmen > .nh { position: relative; }
+
+/* ---------- Akzente aus dem Laden: Strohblumen und Abendlicht ---------- */
+:root {
+  --wein: #752538;
+  --magenta: #a62c54;
+  --strohgelb: #e8c22a;
+  --bernstein: #f2b25c;
+  --tanne: #3f5a55;
+}
+
+/* Strohblume statt der Blüte als Trenner */
+.zier .sb { width: 2rem; height: 2rem; flex: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .zier .sb { transition: transform 0.9s var(--aus); }
+  .zier:hover .sb, .abschnitt__kopf:hover .zier .sb { transform: rotate(40deg); }
+}
+
+/* Aktiver Menüpunkt: eine kleine Strohblume statt des Punkts */
+.menue a::before {
+  width: 0.8rem; height: 0.8rem; border-radius: 0;
+  background: url(assets/strohblume.svg) center / contain no-repeat;
+  transform: scale(0) rotate(-60deg);
+}
+.menue a:hover::before, .menue a[aria-current="page"]::before { transform: scale(1) rotate(0); }
+
+/* Band aus Strohblumen auf der Oberkante der Fusszeile */
+.fuss { position: relative; padding-top: calc(var(--raum-m) + 1.5rem); }
+.fuss__kranz { position: absolute; left: 0; right: 0; top: -1.9rem; height: 3.75rem; pointer-events: none; }
+.fuss__kranz svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.fuss__kranz .fuss__kranz--schmal { display: none; }
+@media (max-width: 40rem) {
+  .fuss__kranz { top: -1.6rem; height: 3.2rem; }
+  .fuss__kranz .fuss__kranz--breit { display: none; }
+  .fuss__kranz .fuss__kranz--schmal { display: block; }
+}
+@media (max-width: 51.99rem) {
+  .menue a::before { width: 0.6rem; height: 0.6rem; margin-left: -0.3rem; bottom: -0.2rem; }
+}
+.fuss__blaetter { fill: #9aa594; stroke: #6f7a6a; stroke-width: 0.6; }
+
+/* Blumenkästen an der Gasse in den Farben der Strohblumen */
+.fl i::before {
+  background:
+    radial-gradient(circle at 12% 60%, var(--strohgelb) 0.09em, var(--magenta) 0.1em 0.28em, transparent 0.3em),
+    radial-gradient(circle at 30% 30%, var(--strohgelb) 0.09em, #e2aca0 0.1em 0.3em, transparent 0.32em),
+    radial-gradient(circle at 50% 65%, var(--strohgelb) 0.09em, #f3ebe5 0.1em 0.28em, transparent 0.3em),
+    radial-gradient(circle at 70% 35%, var(--strohgelb) 0.09em, var(--magenta) 0.1em 0.3em, transparent 0.32em),
+    radial-gradient(circle at 88% 62%, var(--strohgelb) 0.09em, #e2aca0 0.1em 0.28em, transparent 0.3em),
+    radial-gradient(ellipse 50% 45% at 50% 100%, #8a9886 98%, transparent);
+}
+
+/* Abend an der Nummer 13: warmes Licht im Schaufenster, Schein auf dem Pflaster */
+.f13__front figure { box-shadow: inset 0 0 0 0.2em #1b1815, 0 0 2.2em 0.3em rgb(242 178 92 / 0.45); }
+.f13__front { box-shadow: 0 0 0 1px var(--tinte), 0 1.2em 3.5em -0.5em rgb(242 170 80 / 0.7); }
+.f13__front figure::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(ellipse 80% 70% at 50% 0%, rgb(255 205 130 / 0.55), transparent 75%);
+  mix-blend-mode: soft-light;
+}
+.f13__front img { filter: saturate(1.08) sepia(0.12) brightness(1.04); }
+.weg--3d .weg__boden {
+  background:
+    radial-gradient(ellipse 16em 11em at 50% 0%, rgb(240 160 60 / 0.75), rgb(242 178 92 / 0.3) 50%, transparent 78%) no-repeat,
+    radial-gradient(ellipse 0.9em 0.55em at 50% 50%, #cbbfa6 62%, transparent 68%) 0 0 / 2em 1.3em,
+    radial-gradient(ellipse 0.9em 0.55em at 50% 50%, #cbbfa6 62%, transparent 68%) 1em 0.65em / 2em 1.3em,
+    linear-gradient(90deg, transparent calc(50% - 1.6em), #c3b69b 0 calc(50% - 1.3em), #b3a68a 0 calc(50% + 1.3em), #c3b69b 0 calc(50% + 1.6em), transparent 0),
+    linear-gradient(90deg, #a99c80 0 4em, transparent 4em calc(100% - 4em), #a99c80 0),
+    #ddd2bb;
+}
+
+/* Kontakt: Tannenkranz an der Ladentür, warmes Licht hinter dem Glas */
+.tuer__glas { position: relative; }
+.tuer__glas img { filter: brightness(0.62) saturate(0.85) sepia(0.25); }
+.tuer__glas::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 90% 70% at 50% 35%, rgb(255 190 100 / 0.45), rgb(40 25 10 / 0.25) 80%);
+  mix-blend-mode: overlay;
+}
+.tuer { box-shadow: inset 0 0 0 0.45rem #3b3732, 0 1rem 2rem -1rem rgb(30 25 20 / 0.5), 0 2.5rem 4rem -2.5rem rgb(242 178 92 / 0.55); }
+.tuer__kranz { position: absolute; left: 50%; top: 0; width: 10.5rem; margin-left: -5.25rem; z-index: 1; pointer-events: none; transform-origin: 50% 0; }
+.tuer__kranz svg { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 0.35rem 0.3rem rgb(0 0 0 / 0.5)); }
+.kranz__band { fill: none; stroke: #7d7836; stroke-width: 4; }
+.kranz__schleife { fill: #8a8540; stroke: #5d5a25; stroke-width: 0.8; stroke-linejoin: round; }
+.kranz__rose { fill: #fbf8f1; stroke: #c9c3b3; stroke-width: 0.6; }
+.kranz__zapfen { fill: #7a5638; stroke: #4e3622; stroke-width: 0.8; }
+.kranz__zapfen path { fill: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .tuer__kranz { animation: kranz 3.2s var(--aus) 0.3s both; }
+  @keyframes kranz { 0% { transform: rotate(4deg); } 40% { transform: rotate(-2.5deg); } 100% { transform: rotate(0); } }
+}

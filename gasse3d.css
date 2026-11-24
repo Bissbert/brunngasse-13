@@ -1,0 +1,35 @@
+/* Bühne der WebGL-Gasse (assets/gasse3d/). Gilt nur, wenn start.js die Gasse übernommen hat (.gweg).
+   Ohne Skript, ohne WebGL 2 oder bei einem Fehler bleibt .weg die schlichte Bildergalerie. */
+.gweg { position: relative; height: 560vh; padding: 0; font-size: clamp(9px, 2.7vw, 15px); }
+.gweg .weg__buehne {
+  position: sticky; top: var(--kopf-h, 0px); height: calc(100svh - var(--kopf-h, 0px)); overflow: hidden;
+  background: var(--gweg-grund, linear-gradient(180deg, #4f86cc 0%, #8db6e2 34%, #e6ecf0 62%)); contain: strict;
+}
+/* Bis zum ersten 3D-Bild: leere Bühne in der Himmelsfarbe (start.js setzt die genaue Stimmung) */
+[data-theme="dark"] .gweg .weg__buehne { background: var(--gweg-grund, linear-gradient(180deg, #03050c 0%, #0a1222 34%, #1a2538 62%)); }
+.gweg__leinwand, .gweg__blende { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.gweg__leinwand { opacity: 0; transition: opacity 0.6s ease-out; }
+.gweg--bereit .gweg__leinwand { opacity: 1; }
+.gweg__blende { pointer-events: none; opacity: 0; transition: opacity 0.7s ease-in-out; }
+
+/* Die Bilder, Bildunterschriften und das Haus 13 bleiben im Dokument für Vorleseprogramme, sichtbar ist die 3D-Gasse */
+.gweg .weg__welt, .gweg .weg__himmel {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+.gweg .weg__hinweis {
+  display: flex; position: absolute; left: 50%; bottom: 1.5rem; transform: translateX(-50%); z-index: 2;
+  align-items: center; gap: 0.5rem; padding: 0.45rem 0.9rem; border-radius: 2rem; white-space: nowrap;
+  background: rgb(252 251 248 / 0.9); box-shadow: 0 0 0 1px var(--linie); font: 0.875rem var(--sans); color: var(--leise);
+  transition: opacity 0.4s;
+}
+.gweg .weg__hinweis .z { width: 1rem; height: 1rem; transform: rotate(90deg); }
+[data-theme="dark"] .gweg .weg__hinweis { background: rgb(36 26 20 / 0.85); box-shadow: 0 0 0 1px rgb(196 165 116 / 0.35); color: #ddcfbb; }
+
+/* Prüfmodus (?fahrt=0..1): Bühne fest über dem ganzen Fenster, für Stillbilder */
+.gweg--pruef .weg__buehne { position: fixed; inset: 0; top: 0; height: 100vh; z-index: 50; }
+.gweg__fehler {
+  position: absolute; left: 0.5rem; top: 0.5rem; right: 0.5rem; z-index: 3; margin: 0; padding: 0.4rem 0.6rem;
+  font: 600 12px/1.35 ui-monospace, monospace; color: #fff; background: rgb(150 20 20 / 0.85); white-space: normal;
+}

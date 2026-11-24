@@ -1,0 +1,60 @@
+/* ---------- Nacht: der Laden nach Ladenschluss. Nussbaum, Eiche, Messing; das Licht kommt aus den Lampen und den Blumen. ---------- */
+:root[data-theme="dark"] {
+  --papier: #1a130f;      /* Nussbaum, Grund */
+  --weiss: #241a14;       /* erhöhte Flächen: geölte Eiche */
+  --heu-hell: #1f1712;    /* Wechselflächen */
+  --heu: #3a2b20;
+  --heu-tief: #5a4532;
+  --schnur: #c4a574;      /* Messing und Schnur */
+  --tinte: #f4eadb;       /* warmes Elfenbein */
+  --text: #ddcfbb;
+  --leise: #b4a28a;
+  --linie: #33271e;
+  --linie-fest: #75604b;
+  --rose: #ec95ae;
+  --rose-hell: #3e2229;
+  --gassenblau: #2a4f9f;
+  --schatten: 0 0.8rem 1.8rem -0.7rem rgb(0 0 0 / 0.6);
+  --bernstein: #f2b25c;
+  color-scheme: dark;
+}
+[data-theme="dark"] body {
+  background:
+    radial-gradient(ellipse 60rem 30rem at 85% -10%, rgb(242 178 92 / 0.09), transparent 70%),
+    var(--papier);
+}
+/* Wortmarke hell, wie Schrift auf dunklem Glas */
+[data-theme="dark"] .marke img, [data-theme="dark"] .fuss img[src$="logo.png"] { filter: invert(1) brightness(0.94) sepia(0.12); }
+/* Fotos leicht abgedunkelt und wärmer, damit sie nicht aus der Nacht herausstrahlen */
+[data-theme="dark"] main img:not([src$="logo.png"]) { filter: brightness(0.86) saturate(0.95); }
+[data-theme="dark"] .fenster__glas { outline-color: var(--linie-fest); box-shadow: 0 1.6rem 4rem -1rem rgb(242 170 80 / 0.3); }
+[data-theme="dark"] .fenster__glas img { filter: brightness(0.9) sepia(0.15); }
+/* Markise: Weiss wird zu gedecktem Elfenbein */
+[data-theme="dark"] .kopf::after { filter: brightness(0.82) drop-shadow(0 0.35rem 0.4rem rgb(0 0 0 / 0.5)); }
+[data-theme="dark"] .kopf { background: #150f0c; box-shadow: inset 0 -1px 0 var(--linie); }
+/* Heu nur noch als Ahnung unter einer Nachtschicht */
+[data-theme="dark"] .besuch { background-image: linear-gradient(rgb(26 19 15 / 0.78), rgb(26 19 15 / 0.86)), url(assets/bilder/heu.jpg); }
+/* Knöpfe: heller Knopf mit dunkler Schrift */
+[data-theme="dark"] .knopf--voll:hover { background: #fff; }
+[data-theme="dark"] .knopf--linie { border-color: var(--linie-fest); }
+/* Strohblumen: das tiefe Weinrot verschwindet auf Nachtblau, also heller und mit warmem Rand */
+[data-theme="dark"] .fuss { background: #150f0c; border-top-color: var(--linie); }
+[data-theme="dark"] .fuss__kranz svg { filter: brightness(1.18) saturate(1.05) drop-shadow(0 0 0.35rem rgb(242 178 92 / 0.18)); }
+[data-theme="dark"] .fuss__blaetter { fill: #8e9b8a; stroke: #5d6a5a; }
+[data-theme="dark"] .zier .sb { filter: brightness(1.25); }
+/* Werktisch-Raster und Karten */
+[data-theme="dark"] .werkbank, [data-theme="dark"] .abschnitt--heu, [data-theme="dark"] .rundgang, [data-theme="dark"] .fach--heu { background: var(--heu-hell); }
+[data-theme="dark"] .geklebt::before { background: rgb(185 164 124 / 0.55); }
+/* Ladentür bei Nacht: Glas warm erleuchtet */
+[data-theme="dark"] .tuer { background: #110c09; box-shadow: 0 2rem 4rem -1rem rgb(242 170 80 / 0.32); }
+[data-theme="dark"] .tuer__glas { border-color: #2a2622; }
+[data-theme="dark"] .tuer__glas img { filter: brightness(0.8) saturate(0.95) sepia(0.2); }
+[data-theme="dark"] .schwelle { background: #5c503c; border-top-color: #3e3527; }
+/* Brief-Formular und Briefmarke */
+[data-theme="dark"] input, [data-theme="dark"] textarea, [data-theme="dark"] select { background: #1a130f; color: var(--tinte); border-color: var(--linie-fest); }
+/* Emailschilder bleiben weiss auf Blau wie in der echten Gasse */
+[data-theme="dark"] .gassenschild, [data-theme="dark"] .gassenschild *, [data-theme="dark"] .hausnummer { color: #fff; border-color: #fff; }
+/* Browserflächen aus derselben Palette */
+[data-theme="dark"] ::selection { background: #5a3a2c; color: var(--tinte); }
+[data-theme="dark"] html, html[data-theme="dark"] { scrollbar-color: var(--heu-tief) var(--papier); }
+[data-theme="dark"] :focus-visible { outline-color: var(--schnur); }
